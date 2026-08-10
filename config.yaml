@@ -1,0 +1,91 @@
+experiment:
+  seed: 42
+  repetitions: 5
+  device: auto
+  output_dir: outputs
+
+# MNIST and CIFAR-10 are subsystem benchmarks only.
+datasets:
+  data_dir: data
+  toniot_csv: data/ToN-IoT.csv
+  target_column: null
+  test_size: 0.20
+  val_size_from_train: 0.20
+  max_rows: null
+
+federated:
+  clients: 10
+  rounds: 100
+  local_epochs: 5
+  client_fraction: 1.0
+  partition: dirichlet
+  dirichlet_alpha: 0.5
+  min_client_samples: 20
+  cluster_training: true
+  clusters: 2
+  odd_even_schedule: true
+  aggregation: fedavg
+
+optimization:
+  optimizer: adam
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  batch_size: 64
+
+hce:
+  enabled: true
+  bits: 64
+  projection_dim: 128
+  similarity_weight: 0.20
+  quantization_weight: 0.05
+  prototype_weight: 0.10
+
+# AF-MFA: Adaptive Federated Multi-Factor Authentication
+af_mfa:
+  enabled: true
+  population: 40
+  generations: 35
+  mutation_rate: 0.12
+  low_risk_threshold: 0.30
+  medium_risk_threshold: 0.65
+  high_risk_threshold: 0.85
+  minimum_factors: 1
+
+privacy:
+  clipping: true
+  clip_norm: 1.0
+  differential_privacy: false
+  noise_multiplier: 0.0
+  secure_aggregation: true
+
+security:
+  robust_filter: true
+  max_update_norm_zscore: 3.5
+  cosine_floor: -0.25
+  replay_window_seconds: 120
+
+blockchain:
+  enabled: true
+  consensus: limited_raft
+  validator_nodes: 5
+  crash_tolerance: 2
+  hash: sha256
+  ledger_dir: outputs/ledger
+
+ipfs:
+  enabled: false
+  api_url: http://127.0.0.1:5001
+  local_cas_dir: outputs/cas
+
+baselines:
+  methods: [fedavg, fedprox, scaffold, fednova, moon, feddyn]
+  fedprox_mu: 0.01
+  moon_mu: 0.10
+  feddyn_alpha: 0.01
+
+attacks:
+  malicious_fraction: 0.20
+  label_flip_fraction: 1.0
+  sign_flip_scale: 5.0
+  model_replacement_scale: 10.0
+  sybil_multiplier: 3
